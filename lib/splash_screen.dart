@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
-  _SplashScreenState createState() => _SplashScreenState();
+  State<SplashScreen> createState() => SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration(seconds: 3), () {
-      Navigator.pushReplacementNamed(context, '/login');
+      if (mounted) {
+        Navigator.pushReplacementNamed(context, '/login');
+      }
     });
   }
 
@@ -32,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
               Icon(Icons.school, size: 100, color: Colors.white),
               SizedBox(height: 20),
               Text(
-                'LMS',
+                'STARS CLASS',
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
@@ -40,7 +44,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
               ),
               Text(
-                'Stars class',
+                'Sparkling Inspiration',
                 style: TextStyle(
                   fontSize: 18,
                   color: Colors.white70,

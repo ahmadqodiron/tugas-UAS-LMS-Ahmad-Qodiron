@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  LoginScreenState createState() => LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class LoginScreenState extends State<LoginScreen> {
   bool _isObscure = true;
 
   @override
@@ -21,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 bottomRight: Radius.circular(50),
               ),
               child: Image.network(
-                'https://picsum.photos/400/200',
+                'https://images.unsplash.com/photo-1680444873773-7c106c23ac52?q=80&w=1934&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
                 height: 250,
                 width: double.infinity,
                 fit: BoxFit.cover,
@@ -74,7 +76,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderRadius: BorderRadius.circular(25),
                     ),
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushReplacementNamed(context, '/home');
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.transparent,
                         shadowColor: Colors.transparent,
