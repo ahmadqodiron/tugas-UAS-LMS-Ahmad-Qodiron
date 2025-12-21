@@ -1,4 +1,8 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'profile_screen.dart';
+import 'user_provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -19,50 +23,66 @@ class HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Hallo,',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.normal,
+    return Consumer<User>(
+      builder: (context, user, child) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Hallo,',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.normal,
+                  ),
+                ),
+                Text(
+                  user.fullName,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            flexibleSpace: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.blue[900]!, Colors.blue[300]!],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                ),
               ),
             ),
-            Text(
-              'Mahasiswa', // Replace with actual name
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+            actions: [
+              Padding(
+                padding: const EdgeInsets.only(right: 16.0),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ProfileScreen()),
+                    );
+                  },
+                  child: CircleAvatar(
+                    radius: 20,
+                    backgroundImage: user.profileImagePath != null
+                        ? FileImage(File(user.profileImagePath!))
+                        : null,
+                    backgroundColor: user.profileImagePath == null ? Colors.blue[800] : null,
+                    child: user.profileImagePath == null
+                        ? Icon(Icons.person, color: Colors.white)
+                        : null,
+                  ),
+                ),
               ),
-            ),
-          ],
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.blue[900]!, Colors.blue[300]!],
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-            ),
+            ],
           ),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0),
-            child: CircleAvatar(
-              backgroundColor: Colors.blue[800],
-              child: Icon(Icons.person, color: Colors.white),
-            ),
-          ),
-        ],
-      ),
       body: _selectedIndex == 0
           ? ListView(
               padding: const EdgeInsets.all(16.0),
@@ -220,6 +240,8 @@ class HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.white,
         onTap: _onItemTapped,
       ),
+        );
+      },
     );
   }
 
