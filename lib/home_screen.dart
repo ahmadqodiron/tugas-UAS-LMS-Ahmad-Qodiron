@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'profile_screen.dart';
 import 'user_provider.dart';
+import 'kelas_saya_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,10 +16,18 @@ class HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-    // Handle navigation here if needed
+    if (index == 1) {
+      // Navigate to Kelas Saya
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const KelasSayaScreen()),
+      );
+    } else {
+      setState(() {
+        _selectedIndex = index;
+      });
+      // Handle other navigation if needed
+    }
   }
 
   @override
@@ -177,7 +186,7 @@ class HomeScreenState extends State<HomeScreen> {
                       ClipRRect(
                         borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
                         child: Image.network(
-                          'https://images.pexels.com/photos/207691/pexels-photo-207691.jpeg?auto=compress&cs=tinysrgb&w=400&h=200&fit=crop',
+                          'https://media.istockphoto.com/id/2233876941/id/foto/guru-memberikan-pelajaran-kepada-kelas-yang-beragam-di-kelas.jpg?s=612x612&w=0&k=20&c=atuRpN4S82V19D2mlVUSzLAsCzUi3HqZxDP-5ecEX5g=',
                           height: 150,
                           width: double.infinity,
                           fit: BoxFit.cover,
