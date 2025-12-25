@@ -13,6 +13,7 @@ class User with ChangeNotifier {
   DateTime lastAccess;
   bool isLoggedIn;
   List<Map<String, String>> classes;
+  Map<String, List<Map<String, dynamic>>> classAnnouncements;
 
   User({
     required this.firstName,
@@ -27,7 +28,8 @@ class User with ChangeNotifier {
     required this.lastAccess,
     this.isLoggedIn = false,
     List<Map<String, String>>? classes,
-  }) : classes = classes ?? [];
+    Map<String, List<Map<String, dynamic>>>? classAnnouncements,
+  }) : classes = classes ?? [], classAnnouncements = classAnnouncements ?? {};
 
   String get fullName => '$firstName $lastName';
 
@@ -76,6 +78,7 @@ class User with ChangeNotifier {
     lastAccess = DateTime.now();
     isLoggedIn = false;
     classes.clear();
+    classAnnouncements.clear();
     notifyListeners();
   }
 
@@ -86,6 +89,15 @@ class User with ChangeNotifier {
 
   void addClass(Map<String, String> newClass) {
     classes.add(newClass);
+    classAnnouncements[newClass['id']!] = [];
+    notifyListeners();
+  }
+
+  void addAnnouncement(String classId, Map<String, dynamic> announcement) {
+    if (!classAnnouncements.containsKey(classId)) {
+      classAnnouncements[classId] = [];
+    }
+    classAnnouncements[classId]!.add(announcement);
     notifyListeners();
   }
 }
