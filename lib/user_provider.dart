@@ -12,6 +12,7 @@ class User with ChangeNotifier {
   DateTime firstAccess;
   DateTime lastAccess;
   bool isLoggedIn;
+  List<Map<String, String>> classes;
 
   User({
     required this.firstName,
@@ -25,7 +26,8 @@ class User with ChangeNotifier {
     required this.firstAccess,
     required this.lastAccess,
     this.isLoggedIn = false,
-  });
+    List<Map<String, String>>? classes,
+  }) : classes = classes ?? [];
 
   String get fullName => '$firstName $lastName';
 
@@ -73,6 +75,7 @@ class User with ChangeNotifier {
     firstAccess = DateTime(2023, 9, 1);
     lastAccess = DateTime.now();
     isLoggedIn = false;
+    classes.clear();
     notifyListeners();
   }
 
@@ -81,22 +84,8 @@ class User with ChangeNotifier {
     notifyListeners();
   }
 
-  // Dummy classes
-  static List<Map<String, String>> dummyClasses = [
-    {
-      'nama': 'Matematika Dasar',
-      'kode': 'MATH101',
-      'tanggal_mulai': '2023-09-01',
-    },
-    {
-      'nama': 'Fisika',
-      'kode': 'PHYS101',
-      'tanggal_mulai': '2023-09-01',
-    },
-    {
-      'nama': 'Kimia',
-      'kode': 'CHEM101',
-      'tanggal_mulai': '2023-09-01',
-    },
-  ];
+  void addClass(Map<String, String> newClass) {
+    classes.add(newClass);
+    notifyListeners();
+  }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'user_provider.dart';
 
 class KelasTab extends StatelessWidget {
@@ -6,7 +7,8 @@ class KelasTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final classes = User.dummyClasses;
+    final user = Provider.of<User>(context);
+    final classes = user.classes;
 
     return ListView.builder(
       padding: const EdgeInsets.all(16.0),

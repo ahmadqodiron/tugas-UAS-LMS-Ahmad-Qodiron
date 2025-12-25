@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'materi_tab.dart';
 import 'tugas_kuis_tab.dart';
+import 'create_class_screen.dart';
 
 class KelasSayaScreen extends StatefulWidget {
   const KelasSayaScreen({super.key});
@@ -44,31 +45,13 @@ class KelasSayaScreenState extends State<KelasSayaScreen>
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 80, // Increased height for better text fit
-        title: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(
-                'DESAIN ANTARMUKA & PENGALAMAN PENGGUNA',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 15, // Slightly smaller
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
-                maxLines: 1,
-              ),
-            ),
-            Text(
-              'D4SM-42-03',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 13, // Slightly smaller
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
+        title: const Text(
+          'Kelas Saya',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -117,6 +100,28 @@ class KelasSayaScreenState extends State<KelasSayaScreen>
           MateriTab(),
           TugasKuisTab(),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const CreateClassScreen()),
+          );
+        },
+        child: Container(
+          width: 56,
+          height: 56,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            gradient: LinearGradient(
+              colors: [Colors.blue[900]!, Colors.blue[300]!],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+          child: const Icon(Icons.add, color: Colors.white),
+        ),
+        elevation: 6,
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[

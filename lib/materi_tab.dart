@@ -1,112 +1,122 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
+import 'user_provider.dart';
 
 class MateriTab extends StatelessWidget {
   const MateriTab({super.key});
 
-  // Dummy data for materi
-  static const List<Map<String, dynamic>> dummyMateri = [
-    {
-      'label': 'Pertemuan 1',
-      'title': '01 – Pengantar User Interface Design',
-      'description': '2 URL, 1 File, 0 Kuis, 1 Interactive Content',
-      'isCompleted': true,
-    },
-    {
-      'label': 'Pertemuan 2',
-      'title': '02 – Prinsip Desain UI',
-      'description': '3 URL, 2 File, 1 Kuis, 0 Interactive Content',
-      'isCompleted': true,
-    },
-    {
-      'label': 'Pertemuan 3',
-      'title': '03 – Wireframing dan Prototyping',
-      'description': '1 URL, 3 File, 0 Kuis, 2 Interactive Content',
-      'isCompleted': false,
-    },
-    {
-      'label': 'Pertemuan 4',
-      'title': '04 – Color Theory dalam UI',
-      'description': '2 URL, 1 File, 1 Kuis, 1 Interactive Content',
-      'isCompleted': false,
-    },
-    {
-      'label': 'Pertemuan 5',
-      'title': '05 – Typography dan Layout',
-      'description': '3 URL, 2 File, 0 Kuis, 1 Interactive Content',
-      'isCompleted': false,
-    },
-  ];
-
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.grey[50], // Soft background
-      child: ListView.builder(
-        padding: const EdgeInsets.all(16.0),
-        itemCount: dummyMateri.length,
-        itemBuilder: (context, index) {
-          final materi = dummyMateri[index];
-          return Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            elevation: 2, // Lighter shadow
-            color: Colors.white,
-            margin: const EdgeInsets.only(bottom: 12), // More spacing
-            child: Padding(
-              padding: const EdgeInsets.all(20.0), // More padding
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+    return Consumer<User>(
+      builder: (context, user, child) {
+        final classes = user.classes;
+        if (classes.isEmpty) {
+          return Container(
+            color: Colors.grey[50],
+            child: const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          materi['label'],
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.blue[400], // Slightly darker blue
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          materi['title'],
-                          style: TextStyle(
-                            fontSize: 18, // Slightly larger
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
-                            height: 1.2, // Better line height
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          materi['description'],
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey[700], // Darker grey
-                            height: 1.3,
-                          ),
-                        ),
-                      ],
-                    ),
+                  Icon(
+                    Icons.school,
+                    size: 64,
+                    color: Colors.grey,
                   ),
-                  if (materi['isCompleted'])
-                    Padding(
-                      padding: const EdgeInsets.only(left: 16.0, top: 4.0),
-                      child: Icon(
-                        Icons.check_circle,
-                        color: Colors.green[600], // Slightly darker green
-                        size: 28, // Slightly larger
-                      ),
+                  SizedBox(height: 16),
+                  Text(
+                    'Belum ada kelas. Silakan tambahkan kelas baru.',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey,
                     ),
+                    textAlign: TextAlign.center,
+                  ),
                 ],
               ),
             ),
           );
-        },
-      ),
+        }
+        return Container(
+          color: Colors.grey[50],
+          child: ListView.builder(
+            padding: const EdgeInsets.all(16.0),
+            itemCount: classes.length,
+            itemBuilder: (context, index) {
+              final kelas = classes[index];
+              return Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                elevation: 2,
+                color: Colors.white,
+                margin: const EdgeInsets.only(bottom: 12),
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Stack(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            kelas['namaKelas']!,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            kelas['mataPelajaran']!,
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey[700],
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Bagian: ${kelas['bagian']}, Ruang: ${kelas['ruang']}',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                        ],
+                      ),
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        child: PopupMenuButton<String>(
+                          onSelected: (value) {
+                            if (value == 'share') {
+                              final link = 'https://lms-app.com/invite/${kelas['id']}';
+                              Share.share('Bergabunglah dengan kelas ${kelas['namaKelas']} melalui link ini: $link');
+                            }
+                          },
+                          itemBuilder: (context) => [
+                            const PopupMenuItem(
+                              value: 'share',
+                              child: Row(
+                                children: [
+                                  Icon(Icons.share, color: Colors.blue),
+                                  SizedBox(width: 8),
+                                  Text('Bagikan Link Undangan'),
+                                ],
+                              ),
+                            ),
+                          ],
+                          icon: const Icon(Icons.more_vert, color: Colors.grey),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }
