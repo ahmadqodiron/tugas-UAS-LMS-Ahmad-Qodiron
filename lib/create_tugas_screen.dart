@@ -49,7 +49,7 @@ class CreateTugasScreenState extends State<CreateTugasScreen> {
   }
 
   void _saveTugas() {
-    if (_formKey.currentState!.validate() && _selectedDeadline != null) {
+    if ((_formKey.currentState?.validate() ?? false) && _selectedDeadline != null) {
       final task = {
         'id': DateTime.now().millisecondsSinceEpoch.toString(),
         'type': 'Tugas',
@@ -73,7 +73,7 @@ class CreateTugasScreenState extends State<CreateTugasScreen> {
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Colors.blue[900]!, Colors.blue[300]!],
+              colors: [Colors.blue.shade900, Colors.blue.shade300],
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
             ),

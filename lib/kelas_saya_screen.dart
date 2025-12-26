@@ -3,6 +3,7 @@ import 'materi_tab.dart';
 import 'tugas_kuis_tab.dart';
 import 'create_class_screen.dart';
 import 'create_tugas_screen.dart';
+import 'create_kuis_screen.dart';
 
 class KelasSayaScreen extends StatefulWidget {
   const KelasSayaScreen({super.key});
@@ -59,7 +60,7 @@ class KelasSayaScreenState extends State<KelasSayaScreen>
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Colors.blue[900]!, Colors.blue[300]!],
+              colors: [Colors.blue.shade900, Colors.blue.shade300],
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
             ),
@@ -112,6 +113,7 @@ class KelasSayaScreenState extends State<KelasSayaScreen>
             );
           } else if (_tabController.index == 1) {
             // Tugas dan Kuis tab
+            final outerContext = context;
             showModalBottomSheet(
               context: context,
               shape: const RoundedRectangleBorder(
@@ -129,12 +131,22 @@ class KelasSayaScreenState extends State<KelasSayaScreen>
                         onTap: () {
                           Navigator.pop(context);
                           Navigator.push(
-                            context,
+                            outerContext,
                             MaterialPageRoute(builder: (context) => const CreateTugasScreen()),
                           );
                         },
                       ),
-                      // Add more options later
+                      ListTile(
+                        leading: const Icon(Icons.quiz, color: Colors.blue),
+                        title: const Text('Buat Kuis'),
+                        onTap: () {
+                          Navigator.pop(context);
+                          Navigator.push(
+                            outerContext,
+                            MaterialPageRoute(builder: (context) => CreateKuisScreen()),
+                          );
+                        },
+                      ),
                     ],
                   ),
                 );
@@ -145,16 +157,17 @@ class KelasSayaScreenState extends State<KelasSayaScreen>
         child: Container(
           width: 56,
           height: 56,
+          child: const Icon(Icons.add, color: Colors.white),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             gradient: LinearGradient(
-              colors: [Colors.blue[900]!, Colors.blue[300]!],
+              colors: [Colors.blue.shade900, Colors.blue.shade300],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
           ),
-          child: const Icon(Icons.add, color: Colors.white),
         ),
+        backgroundColor: Colors.transparent,
         elevation: 6,
       ),
       bottomNavigationBar: BottomNavigationBar(

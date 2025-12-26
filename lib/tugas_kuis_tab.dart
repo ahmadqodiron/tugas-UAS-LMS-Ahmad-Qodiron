@@ -32,118 +32,123 @@ class TugasKuisTab extends StatelessWidget {
             itemCount: allItems.length,
             itemBuilder: (context, index) {
               final item = allItems[index];
-              final isSubmitted = item['type'] == 'Tugas' && user.isTaskSubmitted(item['id'] ?? '');
-          return InkWell(
-            onTap: item['type'] == 'Tugas' ? () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => TaskDetailScreen(task: item),
+              final type = item['type'] as String? ?? 'Unknown';
+              final title = item['title'] as String? ?? 'No Title';
+              final deadline = item['deadline'] as String? ?? 'No Deadline';
+              final id = item['id'] as String? ?? '';
+              final isSubmitted = type == 'Tugas' && user.isTaskSubmitted(id);
+              return InkWell(
+                onTap: type == 'Tugas' ? () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => TaskDetailScreen(task: item),
+                    ),
+                  );
+                } : null,
+                child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
                 ),
-              );
-            } : null,
-            child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            elevation: 2, // Lighter shadow
-            color: Colors.white,
-            margin: const EdgeInsets.only(bottom: 12), // More spacing
-            child: Padding(
-              padding: const EdgeInsets.all(20.0), // More padding
-              child: Stack(
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                elevation: 2, // Lighter shadow
+                color: Colors.white,
+                margin: const EdgeInsets.only(bottom: 12), // More spacing
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, isSubmitted ? 60.0 : 20.0), // More padding, extra bottom for checkmark
+                  child: Stack(
                     children: [
-                      Icon(
-                        _getIconForType(item['type']),
-                        color: Colors.blue[800],
-                        size: 28, // Slightly larger
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              item['type'],
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.blue[400], // Slightly darker blue
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              item['title'],
-                              style: TextStyle(
-                                fontSize: 18, // Slightly larger
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black87,
-                                height: 1.2, // Better line height
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              'Deadline: ${item['deadline']}',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey[700], // Darker grey
-                                height: 1.3,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  if (item['type'] == 'Tugas')
-                    Positioned(
-                      top: 0,
-                      right: 0,
-                      child: Column(
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          PopupMenuButton<String>(
-                            onSelected: (value) {
-                              if (value == 'share') {
-                                final link = 'https://lms-app.com/tugas/${item['id'] ?? allItems.indexOf(item)}';
-                                Share.share('Lihat tugas: ${item['title']} melalui link ini: $link');
-                              }
-                            },
-                            itemBuilder: (context) => [
-                              const PopupMenuItem(
-                                value: 'share',
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.share, color: Colors.blue),
-                                    SizedBox(width: 8),
-                                    Text('Bagikan Link Tugas'),
-                                  ],
-                                ),
-                              ),
-                            ],
-                            icon: const Icon(Icons.more_vert, color: Colors.grey),
+                          Icon(
+                            _getIconForType(type),
+                            color: Colors.blue[800],
+                            size: 28, // Slightly larger
                           ),
-                          if (isSubmitted)
-                            Padding(
-                              padding: const EdgeInsets.only(top: 8.0),
-                              child: Icon(
-                                Icons.check_circle,
-                                color: Colors.green[600],
-                                size: 28,
-                              ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  type,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.blue[400], // Slightly darker blue
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  title,
+                                  style: TextStyle(
+                                    fontSize: 18, // Slightly larger
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
+                                    height: 1.2, // Better line height
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  'Deadline: $deadline',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey[700], // Darker grey
+                                    height: 1.3,
+                                  ),
+                                ),
+                              ],
                             ),
+                          ),
                         ],
                       ),
-                    ),
-                ],
+                      if (type == 'Tugas' || type == 'Quiz')
+                        Positioned(
+                          top: 0,
+                          right: 0,
+                          child: Column(
+                            children: [
+                              PopupMenuButton<String>(
+                                onSelected: (value) {
+                                  if (value == 'share') {
+                                    final link = type == 'Tugas' ? 'https://lms-app.com/tugas/$id' : 'https://lms-app.com/quiz/$id';
+                                    final itemType = type == 'Tugas' ? 'tugas' : 'kuis';
+                                    Share.share('Lihat $itemType: $title melalui link ini: $link');
+                                  }
+                                },
+                                itemBuilder: (context) => [
+                                  PopupMenuItem(
+                                    value: 'share',
+                                    child: Row(
+                                      children: [
+                                        const Icon(Icons.share, color: Colors.blue),
+                                        const SizedBox(width: 8),
+                                        Text(type == 'Tugas' ? 'Bagikan Link Tugas' : 'Bagikan Link Kuis'),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                                icon: const Icon(Icons.more_vert, color: Colors.grey),
+                              ),
+                              if ((type == 'Tugas' && isSubmitted) || (type == 'Quiz' && (item['isCompleted'] as bool? ?? false)))
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8.0),
+                                  child: Icon(
+                                    Icons.check_circle,
+                                    color: Colors.green[600],
+                                    size: 28,
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
               ),
-            ),
+              );
+            },
           ),
-         );
-        },
-      ),
     );
   },
 );
