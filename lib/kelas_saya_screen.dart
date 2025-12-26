@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'materi_tab.dart';
 import 'tugas_kuis_tab.dart';
 import 'create_class_screen.dart';
+import 'create_tugas_screen.dart';
 
 class KelasSayaScreen extends StatefulWidget {
   const KelasSayaScreen({super.key});
@@ -103,10 +104,43 @@ class KelasSayaScreenState extends State<KelasSayaScreen>
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const CreateClassScreen()),
-          );
+          if (_tabController.index == 0) {
+            // Materi tab
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const CreateClassScreen()),
+            );
+          } else if (_tabController.index == 1) {
+            // Tugas dan Kuis tab
+            showModalBottomSheet(
+              context: context,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              ),
+              builder: (context) {
+                return Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ListTile(
+                        leading: const Icon(Icons.assignment, color: Colors.blue),
+                        title: const Text('Buat Tugas'),
+                        onTap: () {
+                          Navigator.pop(context);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const CreateTugasScreen()),
+                          );
+                        },
+                      ),
+                      // Add more options later
+                    ],
+                  ),
+                );
+              },
+            );
+          }
         },
         child: Container(
           width: 56,

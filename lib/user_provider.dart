@@ -14,6 +14,8 @@ class User with ChangeNotifier {
   bool isLoggedIn;
   List<Map<String, String>> classes;
   Map<String, List<Map<String, dynamic>>> classAnnouncements;
+  List<Map<String, dynamic>> tasks;
+  Map<String, Map<String, dynamic>> taskSubmissions;
 
   User({
     required this.firstName,
@@ -29,7 +31,9 @@ class User with ChangeNotifier {
     this.isLoggedIn = false,
     List<Map<String, String>>? classes,
     Map<String, List<Map<String, dynamic>>>? classAnnouncements,
-  }) : classes = classes ?? [], classAnnouncements = classAnnouncements ?? {};
+    List<Map<String, dynamic>>? tasks,
+    Map<String, Map<String, dynamic>>? taskSubmissions,
+  }) : classes = classes ?? [], classAnnouncements = classAnnouncements ?? {}, tasks = tasks ?? [], taskSubmissions = taskSubmissions ?? {};
 
   String get fullName => '$firstName $lastName';
 
@@ -79,6 +83,8 @@ class User with ChangeNotifier {
     isLoggedIn = false;
     classes.clear();
     classAnnouncements.clear();
+    tasks.clear();
+    taskSubmissions.clear();
     notifyListeners();
   }
 
@@ -99,5 +105,19 @@ class User with ChangeNotifier {
     }
     classAnnouncements[classId]!.add(announcement);
     notifyListeners();
+  }
+
+  void addTask(Map<String, dynamic> task) {
+    tasks.add(task);
+    notifyListeners();
+  }
+
+  void submitTask(String taskId, Map<String, dynamic> submission) {
+    taskSubmissions[taskId] = submission;
+    notifyListeners();
+  }
+
+  bool isTaskSubmitted(String taskId) {
+    return taskSubmissions.containsKey(taskId);
   }
 }
