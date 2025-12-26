@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'user_provider.dart';
 import 'task_detail_screen.dart';
+import 'take_quiz_screen.dart';
+import 'quiz_results_screen.dart';
 
 class TugasKuisTab extends StatelessWidget {
   const TugasKuisTab({super.key});
@@ -38,14 +40,33 @@ class TugasKuisTab extends StatelessWidget {
               final id = item['id'] as String? ?? '';
               final isSubmitted = type == 'Tugas' && user.isTaskSubmitted(id);
               return InkWell(
-                onTap: type == 'Tugas' ? () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => TaskDetailScreen(task: item),
-                    ),
-                  );
-                } : null,
+                onTap: () {
+                  if (type == 'Tugas') {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => TaskDetailScreen(task: item),
+                      ),
+                    );
+                  } else if (type == 'Quiz') {
+                    final isCompleted = (item['isCompleted'] as bool? ?? false);
+                    if (isCompleted) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => QuizResultsScreen(quiz: item),
+                        ),
+                      );
+                    } else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => TakeQuizScreen(quiz: item),
+                        ),
+                      );
+                    }
+                  }
+                },
                 child: Card(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
