@@ -15,7 +15,6 @@ class KelasSayaScreen extends StatefulWidget {
 class KelasSayaScreenState extends State<KelasSayaScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  final int _selectedIndex = 1; // Kelas Saya is active
 
   @override
   void initState() {
@@ -27,19 +26,6 @@ class KelasSayaScreenState extends State<KelasSayaScreen>
   void dispose() {
     _tabController.dispose();
     super.dispose();
-  }
-
-  void _onItemTapped(int index) {
-    if (index == 0) {
-      // Navigate back to Home
-      Navigator.pop(context);
-    } else if (index == 2) {
-      // Notifikasi - placeholder
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Notifikasi belum tersedia')),
-      );
-    }
-    // Kelas Saya is current, do nothing
   }
 
   @override
@@ -65,12 +51,6 @@ class KelasSayaScreenState extends State<KelasSayaScreen>
               end: Alignment.centerRight,
             ),
           ),
-        ),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-            Navigator.pop(context);
-          },
         ),
         bottom: TabBar(
           controller: _tabController,
@@ -169,27 +149,6 @@ class KelasSayaScreenState extends State<KelasSayaScreen>
         ),
         backgroundColor: Colors.transparent,
         elevation: 6,
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.school),
-            label: 'Kelas Saya',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.notifications),
-            label: 'Notifikasi',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blue[800],
-        unselectedItemColor: Colors.grey,
-        backgroundColor: Colors.white,
-        onTap: _onItemTapped,
       ),
     );
   }

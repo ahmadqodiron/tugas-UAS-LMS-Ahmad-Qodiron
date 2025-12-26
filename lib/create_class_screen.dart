@@ -33,6 +33,7 @@ class CreateClassScreenState extends State<CreateClassScreen> {
         'mataPelajaran': _mataPelajaranController.text,
         'bagian': _bagianController.text,
         'ruang': _ruangController.text,
+        'isPinned': false,
       };
       Provider.of<User>(context, listen: false).addClass(newClass);
       Navigator.pop(context);

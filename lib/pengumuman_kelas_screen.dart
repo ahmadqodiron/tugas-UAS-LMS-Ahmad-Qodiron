@@ -6,7 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'user_provider.dart';
 
 class PengumumanKelasScreen extends StatefulWidget {
-  final Map<String, String> kelas;
+  final Map<String, dynamic> kelas;
 
   const PengumumanKelasScreen({super.key, required this.kelas});
 
