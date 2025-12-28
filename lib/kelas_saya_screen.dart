@@ -87,9 +87,69 @@ class KelasSayaScreenState extends State<KelasSayaScreen>
         onPressed: () {
           if (_tabController.index == 0) {
             // Materi tab
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const CreateClassScreen()),
+            final outerContext = context;
+            showModalBottomSheet(
+              context: context,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              ),
+              builder: (context) {
+                return Container(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.school,
+                        size: 64,
+                        color: Colors.blue[800],
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        'Buat Kelas',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Buat kelas baru untuk menambahkan materi, tugas, dan kuis',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            Navigator.push(
+                              outerContext,
+                              MaterialPageRoute(builder: (context) => const CreateClassScreen()),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: const Text(
+                            'Buat Kelas',
+                            style: TextStyle(color: Colors.white, fontSize: 16),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
             );
           } else if (_tabController.index == 1) {
             // Tugas dan Kuis tab
