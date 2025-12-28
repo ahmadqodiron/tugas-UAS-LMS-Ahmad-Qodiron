@@ -45,7 +45,7 @@ class HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 Text(
-                  user.fullName,
+                  user.isProfileFilled ? user.fullName : 'User',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 20,

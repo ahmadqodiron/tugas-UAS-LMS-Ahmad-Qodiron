@@ -114,21 +114,31 @@ class MateriTabState extends State<MateriTab> {
           if (sortedClasses.isEmpty) {
             return Container(
               color: Colors.grey[50],
-              child: const Center(
+              child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(
-                      Icons.school,
+                      Icons.menu_book,
                       size: 64,
-                      color: Colors.grey,
+                      color: Colors.blue[200]?.withOpacity(0.5),
                     ),
                     SizedBox(height: 16),
                     Text(
-                      'Belum ada kelas. Silakan tambahkan kelas baru.',
+                      'Belum Ada Materi',
                       style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.grey,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey[700],
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      'Materi yang dibuat akan muncul di sini',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey[600],
                       ),
                       textAlign: TextAlign.center,
                     ),

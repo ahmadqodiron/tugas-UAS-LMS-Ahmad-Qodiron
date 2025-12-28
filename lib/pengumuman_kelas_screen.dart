@@ -177,7 +177,7 @@ class PengumumanKelasScreenState extends State<PengumumanKelasScreen> {
     if (_announcementController.text.isNotEmpty || _attachments.isNotEmpty) {
       final user = Provider.of<User>(context, listen: false);
       final announcement = {
-        'senderName': user.fullName,
+        'senderName': user.isProfileFilled ? user.fullName : 'User',
         'senderPhoto': user.profileImagePath,
         'content': _announcementController.text,
         'attachments': List.from(_attachments),

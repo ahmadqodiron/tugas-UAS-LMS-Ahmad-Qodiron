@@ -12,6 +12,7 @@ class User with ChangeNotifier {
   DateTime firstAccess;
   DateTime lastAccess;
   bool isLoggedIn;
+  bool isProfileFilled;
   List<Map<String, dynamic>> classes;
   Map<String, List<Map<String, dynamic>>> classAnnouncements;
   List<Map<String, dynamic>> tasks;
@@ -31,6 +32,7 @@ class User with ChangeNotifier {
     required this.firstAccess,
     required this.lastAccess,
     this.isLoggedIn = false,
+    this.isProfileFilled = false,
     List<Map<String, dynamic>>? classes,
     Map<String, List<Map<String, dynamic>>>? classAnnouncements,
     List<Map<String, dynamic>>? tasks,
@@ -57,6 +59,7 @@ class User with ChangeNotifier {
     this.fakultas = fakultas;
     this.country = country;
     this.description = description;
+    this.isProfileFilled = true;
     notifyListeners();
   }
 
@@ -85,6 +88,7 @@ class User with ChangeNotifier {
     firstAccess = DateTime(2023, 9, 1);
     lastAccess = DateTime.now();
     isLoggedIn = false;
+    isProfileFilled = false;
     classes.clear();
     classAnnouncements.clear();
     tasks.clear();

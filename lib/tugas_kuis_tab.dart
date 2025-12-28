@@ -27,6 +27,42 @@ class TugasKuisTab extends StatelessWidget {
     return Consumer<User>(
       builder: (context, user, child) {
         final allItems = user.tasks;
+        if (allItems.isEmpty) {
+          return Container(
+            color: Colors.grey[50],
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.assignment,
+                    size: 64,
+                    color: Colors.blue[200]?.withOpacity(0.5),
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    'Belum Ada Tugas atau Kuis',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey[700],
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'Tugas dan kuis yang dibuat akan tampil di sini',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey[600],
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
         return Container(
           color: Colors.grey[50], // Soft background
           child: ListView.builder(

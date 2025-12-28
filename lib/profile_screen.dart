@@ -4,7 +4,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'user_provider.dart';
 import 'about_me_tab.dart';
-import 'kelas_tab.dart';
 import 'edit_profile_tab.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -20,7 +19,8 @@ class ProfileScreenState extends State<ProfileScreen> with SingleTickerProviderS
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(() => setState(() {}));
   }
 
   @override
@@ -82,7 +82,7 @@ class ProfileScreenState extends State<ProfileScreen> with SingleTickerProviderS
                             ),
                             SizedBox(height: 10),
                             Text(
-                              user.fullName,
+                              user.isProfileFilled ? user.fullName : 'User',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 24,
@@ -96,27 +96,82 @@ class ProfileScreenState extends State<ProfileScreen> with SingleTickerProviderS
                   ),
                 ),
               ),
-              // Tab bar
+              // Custom Tab bar
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                padding: EdgeInsets.all(4),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(25),
-                ),
-                child: TabBar(
-                  controller: _tabController,
-                  tabs: [
-                    Tab(text: 'About Me'),
-                    Tab(text: 'Kelas'),
-                    Tab(text: 'Edit Profile'),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.1),
+                      spreadRadius: 1,
+                      blurRadius: 4,
+                      offset: Offset(0, 2),
+                    ),
                   ],
-                  labelColor: Colors.blue[800],
-                  unselectedLabelColor: Colors.grey,
-                  indicatorColor: Colors.blue[800],
-                  indicator: BoxDecoration(
-                    color: Colors.blue[100],
-                    borderRadius: BorderRadius.circular(25),
-                  ),
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () => _tabController.animateTo(0),
+                        child: AnimatedContainer(
+                          duration: Duration(milliseconds: 250),
+                          padding: EdgeInsets.symmetric(vertical: 12),
+                          decoration: BoxDecoration(
+                            gradient: _tabController.index == 0
+                                ? LinearGradient(colors: [Colors.blue[900]!, Colors.blue[300]!])
+                                : null,
+                            color: _tabController.index == 0 ? null : Colors.grey[100],
+                            borderRadius: BorderRadius.circular(21),
+                            boxShadow: _tabController.index == 0
+                                ? [BoxShadow(color: Colors.blue.withOpacity(0.3), blurRadius: 4, spreadRadius: 1)]
+                                : null,
+                          ),
+                          child: Text(
+                            'About Me',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                              color: _tabController.index == 0 ? Colors.white : Colors.grey[700],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 8),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () => _tabController.animateTo(1),
+                        child: AnimatedContainer(
+                          duration: Duration(milliseconds: 250),
+                          padding: EdgeInsets.symmetric(vertical: 12),
+                          decoration: BoxDecoration(
+                            gradient: _tabController.index == 1
+                                ? LinearGradient(colors: [Colors.blue[900]!, Colors.blue[300]!])
+                                : null,
+                            color: _tabController.index == 1 ? null : Colors.grey[100],
+                            borderRadius: BorderRadius.circular(21),
+                            boxShadow: _tabController.index == 1
+                                ? [BoxShadow(color: Colors.blue.withOpacity(0.3), blurRadius: 4, spreadRadius: 1)]
+                                : null,
+                          ),
+                          child: Text(
+                            'Edit Profile',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                              color: _tabController.index == 1 ? Colors.white : Colors.grey[700],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               // Tab views
@@ -125,7 +180,6 @@ class ProfileScreenState extends State<ProfileScreen> with SingleTickerProviderS
                   controller: _tabController,
                   children: [
                     AboutMeTab(),
-                    KelasTab(),
                     EditProfileTab(),
                   ],
                 ),

@@ -17,18 +17,18 @@ class EditProfileTabState extends State<EditProfileTab> {
   late TextEditingController _fakultasController;
   late TextEditingController _countryController;
   late TextEditingController _descriptionController;
+  bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    final user = context.read<User>();
-    _firstNameController = TextEditingController(text: user.firstName);
-    _lastNameController = TextEditingController(text: user.lastName);
-    _emailController = TextEditingController(text: user.email);
-    _programStudiController = TextEditingController(text: user.programStudi);
-    _fakultasController = TextEditingController(text: user.fakultas);
-    _countryController = TextEditingController(text: user.country);
-    _descriptionController = TextEditingController(text: user.description);
+    _firstNameController = TextEditingController(text: '');
+    _lastNameController = TextEditingController(text: '');
+    _emailController = TextEditingController(text: '');
+    _programStudiController = TextEditingController(text: '');
+    _fakultasController = TextEditingController(text: '');
+    _countryController = TextEditingController(text: '');
+    _descriptionController = TextEditingController(text: '');
   }
 
   @override
@@ -43,19 +43,25 @@ class EditProfileTabState extends State<EditProfileTab> {
     super.dispose();
   }
 
-  void _saveProfile() {
-    if (_firstNameController.text.isEmpty ||
-        _lastNameController.text.isEmpty ||
-        _emailController.text.isEmpty ||
-        _programStudiController.text.isEmpty ||
-        _fakultasController.text.isEmpty ||
-        _countryController.text.isEmpty ||
-        _descriptionController.text.isEmpty) {
+  void _saveProfile() async {
+    if (_firstNameController.text.isEmpty || _lastNameController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Semua field harus diisi')),
+        SnackBar(content: Text('Nama depan dan nama belakang tidak boleh kosong')),
       );
       return;
     }
+
+    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
+    if (!emailRegex.hasMatch(_emailController.text)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Format email tidak valid')),
+      );
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
 
     final user = context.read<User>();
     user.updateProfile(
@@ -67,6 +73,11 @@ class EditProfileTabState extends State<EditProfileTab> {
       country: _countryController.text,
       description: _descriptionController.text,
     );
+
+    setState(() {
+      _isLoading = false;
+    });
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Profil berhasil disimpan')),
     );
@@ -77,90 +88,109 @@ class EditProfileTabState extends State<EditProfileTab> {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: SingleChildScrollView(
-        child: Column(
-          children: [
-            TextField(
-              controller: _firstNameController,
-              decoration: InputDecoration(
-                labelText: 'Nama Depan',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 16),
-            TextField(
-              controller: _lastNameController,
-              decoration: InputDecoration(
-                labelText: 'Nama Terakhir',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 16),
-            TextField(
-              controller: _emailController,
-              decoration: InputDecoration(
-                labelText: 'Email Address',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 16),
-            TextField(
-              controller: _programStudiController,
-              decoration: InputDecoration(
-                labelText: 'Program Studi',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 16),
-            TextField(
-              controller: _fakultasController,
-              decoration: InputDecoration(
-                labelText: 'Fakultas',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 16),
-            TextField(
-              controller: _countryController,
-              decoration: InputDecoration(
-                labelText: 'Negara',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 16),
-            TextField(
-              controller: _descriptionController,
-              maxLines: 3,
-              decoration: InputDecoration(
-                labelText: 'Deskripsi',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 32),
-            Container(
-              width: double.infinity,
-              height: 50,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Colors.blue[900]!, Colors.blue[300]!],
-                ),
-                borderRadius: BorderRadius.circular(25),
-              ),
-              child: ElevatedButton(
-                onPressed: _saveProfile,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.transparent,
-                  shadowColor: Colors.transparent,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
+        child: Card(
+          elevation: 4,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                TextField(
+                  controller: _firstNameController,
+                  decoration: InputDecoration(
+                    labelText: 'Nama Depan',
+                    border: OutlineInputBorder(),
                   ),
                 ),
-                child: Text(
-                  'Simpan',
-                  style: TextStyle(color: Colors.white, fontSize: 18),
+                SizedBox(height: 16),
+                TextField(
+                  controller: _lastNameController,
+                  decoration: InputDecoration(
+                    labelText: 'Nama Terakhir',
+                    border: OutlineInputBorder(),
+                  ),
                 ),
-              ),
+                SizedBox(height: 16),
+                TextField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    labelText: 'Email Address',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(height: 16),
+                TextField(
+                  controller: _programStudiController,
+                  decoration: InputDecoration(
+                    labelText: 'Program Studi',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(height: 16),
+                TextField(
+                  controller: _fakultasController,
+                  decoration: InputDecoration(
+                    labelText: 'Fakultas',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(height: 16),
+                TextField(
+                  controller: _countryController,
+                  decoration: InputDecoration(
+                    labelText: 'Negara',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(height: 16),
+                TextField(
+                  controller: _descriptionController,
+                  maxLines: 3,
+                  decoration: InputDecoration(
+                    labelText: 'Deskripsi',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(height: 32),
+                Container(
+                  width: double.infinity,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.blue[900]!, Colors.blue[300]!],
+                    ),
+                    borderRadius: BorderRadius.circular(25),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.blue.withOpacity(0.3),
+                        spreadRadius: 1,
+                        blurRadius: 5,
+                        offset: Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: ElevatedButton(
+                    onPressed: _isLoading ? null : _saveProfile,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                    ),
+                    child: _isLoading
+                        ? CircularProgressIndicator(color: Colors.white)
+                        : Text(
+                            'Simpan',
+                            style: TextStyle(color: Colors.white, fontSize: 18),
+                          ),
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

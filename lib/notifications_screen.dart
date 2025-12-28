@@ -84,7 +84,7 @@ class NotificationsScreenState extends State<NotificationsScreen> {
             )
           : AppBar(
               title: const Text('Notifikasi'),
-              backgroundColor: Colors.transparent,
+              backgroundColor: const Color.fromARGB(0, 255, 255, 255),
               elevation: 0,
               flexibleSpace: Container(
                 decoration: BoxDecoration(
@@ -114,17 +114,28 @@ class NotificationsScreenState extends State<NotificationsScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(
-                    Icons.notifications_none,
-                    size: 80,
-                    color: Colors.grey,
+                    Icons.notifications_off,
+                    size: 64,
+                    color: Colors.blue[200]?.withOpacity(0.5),
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16),
                   Text(
-                    'Belum ada notifikasi',
+                    'Belum Ada Notifikasi',
                     style: TextStyle(
                       fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey[700],
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'Pemberitahuan akan muncul setelah ada aktivitas',
+                    style: TextStyle(
+                      fontSize: 14,
                       color: Colors.grey[600],
                     ),
+                    textAlign: TextAlign.center,
                   ),
                 ],
               ),
